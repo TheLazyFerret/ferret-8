@@ -1,0 +1,15 @@
+[package]
+name = "ferret-8"
+description = "Simple and small chip-8 interpreter/emulator"
+repository = "https://github.com/TheLazyFerret/ferret-8"
+categories = ["emulators"]
+version = "0.1.0"
+edition = "2024"
+readme = "README.md"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0.101"
+clap = { version = "4.5.58", features = ["derive"] }
+rand = "0.10.0"
+raylib = "5.5.1"

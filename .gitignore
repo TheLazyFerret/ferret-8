@@ -1,0 +1,5 @@
+# Build
+/target
+
+# Chip 8 binaries
+*.ch8
