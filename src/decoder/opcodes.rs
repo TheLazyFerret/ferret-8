@@ -48,7 +48,7 @@ pub const ADD: u16 = 0x8004;
 pub const SUB: u16 = 0x8005;
 /// 0x8xy6: Put VY in VX, then do right shift (storing the lost bit in VF).
 pub const SHR: u16 = 0x8006;
-/// 0x8xy7: 0x8Substract VY with VX, storing the value in VX (with underflow in VF)
+/// 0x8xy7: Substract VY with VX, storing the value in VX (with underflow in VF)
 pub const SUBN: u16 = 0x8007;
 /// 0x8xyE: Put VY in VX, then do left shift (storing the lost bit in VF).
 pub const SHL: u16 = 0x800E;
@@ -57,7 +57,7 @@ pub const SHL: u16 = 0x800E;
 /// 0xEx9E: Skip the next instruction if the key in VX is pressed.
 pub const SKP: u16 = 0xE09E;
 /// 0xExA1: SKip the next instruction if the key in VX is not pressed.
-pub const NSKP: u16 = 0xE0A1;
+pub const SNKP: u16 = 0xE0A1;
 
 // Instructions with first nibble equal (GROUP F).
 /// 0xFx07: Load the delay reg in reg VX.
