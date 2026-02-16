@@ -2,3 +2,4 @@
 //! Hardware emulator module, although CHIP-8 was never implemented.
 
 mod display;
+mod stack;
