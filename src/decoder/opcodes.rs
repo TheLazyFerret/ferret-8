@@ -71,7 +71,7 @@ pub const LD_SOUND: u16 = 0xF018;
 /// 0xFx1E: Values in I and VX are added, the stored in I.
 pub const ADD_I: u16 = 0xF01E;
 /// 0xFx29: Set I to the location of the sprite in VX.
-pub const LD_SPRITE: u16 = 0xF029;
+pub const LD_FONT: u16 = 0xF029;
 /// 0xFx33: Store in I, I+1, I+2 the digits in digital of VX.
 pub const BCD: u16 = 0xF033;
 /// 0xFx55: Store registers V0 through VX starting at location I.

@@ -40,7 +40,7 @@ pub enum Instruction {
   LoadDelay(usize),          // 0xFx15
   LoadSound(usize),          // 0xFx18
   AddI(usize),               // 0xFx1E
-  LoadSprite(usize),         // 0xFx29
+  LoadFont(usize),           // 0xFx29
   Bcd(usize),                // 0xFx33
   StMem(usize),              // 0xFx55
   LdMem(usize),              // 0xFx65
@@ -161,7 +161,7 @@ pub fn decode(instr: u16) -> Result<Instruction, DecodeError> {
         | LD_DELAY => Ok(Instruction::LoadDelay(reg)),
         | LD_SOUND => Ok(Instruction::LoadSound(reg)),
         | ADD_I => Ok(Instruction::AddI(reg)),
-        | LD_SPRITE => Ok(Instruction::LoadSprite(reg)),
+        | LD_FONT => Ok(Instruction::LoadFont(reg)),
         | BCD => Ok(Instruction::Bcd(reg)),
         | ST_MEM => Ok(Instruction::StMem(reg)),
         | LD_MEM => Ok(Instruction::LdMem(reg)),
