@@ -1,8 +1,7 @@
 //! display.rs
 //! Display of the CHIP-8
 
-pub const DISPLAY_WIDTH: usize = 64;
-pub const DISPLAY_HEIGHT: usize = 32;
+use crate::emulator::{DISPLAY_HEIGHT, DISPLAY_WIDTH};
 
 /// The original CHIP-8 uses a 64x32 pixel, monochrome (on/off).
 ///

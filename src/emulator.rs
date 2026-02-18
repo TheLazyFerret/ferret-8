@@ -15,6 +15,9 @@ use self::stack::{Stack, error::StackError};
 use rand::prelude::*;
 use anyhow::Result;
 
+pub const DISPLAY_WIDTH: usize = 64;
+pub const DISPLAY_HEIGHT: usize = 32;
+
 const MEMORY_SIZE: usize = 4096;
 const REG_SIZE: usize = 16;
 /// Due the first 512 bytes are reserved, programs start in this address.
