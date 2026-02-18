@@ -6,14 +6,14 @@ pub mod error;
 mod font;
 mod stack;
 
-use crate::decoder::Instruction;
 use self::display::*;
 use self::error::EmuError;
 use self::font::*;
 use self::stack::{Stack, error::StackError};
+use crate::decoder::Instruction;
 
-use rand::prelude::*;
 use anyhow::Result;
+use rand::prelude::*;
 
 pub const DISPLAY_WIDTH: usize = 64;
 pub const DISPLAY_HEIGHT: usize = 32;
@@ -58,7 +58,7 @@ impl Emulator {
     this.load_fonts();
     this
   }
-  
+
   /// Return the instruction pointed by reg_pc, then increase reg_pc.
   /// Remember each instruction is 16 bit, in BE.
   pub fn fetch(&mut self) -> Result<u16, EmuError> {
@@ -71,45 +71,45 @@ impl Emulator {
     self.reg_pc += 2;
     Ok(instr)
   }
-  
+
   /// execute the corresponding instruction depending instr.
   /// Basically match each function with each Instruction.
   pub fn execute(&mut self, instr: Instruction, rng: &mut ThreadRng, keys: &[bool]) -> Result<()> {
     match instr {
-      Instruction::Cls => self.clear_display(),
-      Instruction::Return => self.ret()?,
-      Instruction::SetPC(n) => self.set_pc(n),
-      Instruction::Call(n) => self.call(n)?,
-      Instruction::SeInmm(x, n) => self.se_inmm(x, n),
-      Instruction::SneInmm(x, n) => self.sne_inmm(x, n),
-      Instruction::SeReg(x, y) => self.se_reg(x, y),
-      Instruction::SneReg(x, y) => self.sne_reg(x, y),
-      Instruction::LoadInmm(x, n) => self.load_inmm(x, n),
-      Instruction::Sum(x, n) => self.sum(x, n),
-      Instruction::LoadI(n) => self.load_i(n),
-      Instruction::Jump(n) => self.jump(n)?,
-      Instruction::Rand(x, n) => self.rand(x, n, rng),
-      Instruction::Display(x, y, n) => self.display(x, y, n),
-      Instruction::LoadReg(x, y) => self.load_reg(x, y),
-      Instruction::Or(x, y) => self.or(x, y),
-      Instruction::And(x, y) => self.and(x, y),
-      Instruction::Xor(x, y) => self.xor(x, y),
-      Instruction::Add(x, y) => self.add(x, y),
-      Instruction::Sub(x, y) => self.sub(x, y),
-      Instruction::SubRev(x, y) => self.rev_sub(x, y),
-      Instruction::ShiftRight(x, y) => self.right_shift(x, y),
-      Instruction::ShiftLeft(x, y) => self.left_shift(x, y),
-      Instruction::Skip(x) => self.skip_key(x, keys)?,
-      Instruction::Snkip(x) => self.snkip_key(x, keys)?,
-      Instruction::GetDelay(x) => self.get_delay(x),
-      Instruction::WaitKey(x) => self.wait_key(x, keys)?,
-      Instruction::LoadDelay(x) => self.load_delay(x),
-      Instruction::LoadSound(x) => self.load_sound(x),
-      Instruction::AddI(x) => self.add_to_index(x),
-      Instruction::LoadFont(x) => self.load_font(x)?,
-      Instruction::Bcd(x) => self.binary_dec(x)?,
-      Instruction::StMem(x) => self.store_mem(x)?,
-      Instruction::LdMem(x) => self.load_mem(x)?,
+      | Instruction::Cls => self.clear_display(),
+      | Instruction::Return => self.ret()?,
+      | Instruction::SetPC(n) => self.set_pc(n),
+      | Instruction::Call(n) => self.call(n)?,
+      | Instruction::SeInmm(x, n) => self.se_inmm(x, n),
+      | Instruction::SneInmm(x, n) => self.sne_inmm(x, n),
+      | Instruction::SeReg(x, y) => self.se_reg(x, y),
+      | Instruction::SneReg(x, y) => self.sne_reg(x, y),
+      | Instruction::LoadInmm(x, n) => self.load_inmm(x, n),
+      | Instruction::Sum(x, n) => self.sum(x, n),
+      | Instruction::LoadI(n) => self.load_i(n),
+      | Instruction::Jump(n) => self.jump(n)?,
+      | Instruction::Rand(x, n) => self.rand(x, n, rng),
+      | Instruction::Display(x, y, n) => self.display(x, y, n),
+      | Instruction::LoadReg(x, y) => self.load_reg(x, y),
+      | Instruction::Or(x, y) => self.or(x, y),
+      | Instruction::And(x, y) => self.and(x, y),
+      | Instruction::Xor(x, y) => self.xor(x, y),
+      | Instruction::Add(x, y) => self.add(x, y),
+      | Instruction::Sub(x, y) => self.sub(x, y),
+      | Instruction::SubRev(x, y) => self.rev_sub(x, y),
+      | Instruction::ShiftRight(x, y) => self.right_shift(x, y),
+      | Instruction::ShiftLeft(x, y) => self.left_shift(x, y),
+      | Instruction::Skip(x) => self.skip_key(x, keys)?,
+      | Instruction::Snkip(x) => self.snkip_key(x, keys)?,
+      | Instruction::GetDelay(x) => self.get_delay(x),
+      | Instruction::WaitKey(x) => self.wait_key(x, keys)?,
+      | Instruction::LoadDelay(x) => self.load_delay(x),
+      | Instruction::LoadSound(x) => self.load_sound(x),
+      | Instruction::AddI(x) => self.add_to_index(x),
+      | Instruction::LoadFont(x) => self.load_font(x)?,
+      | Instruction::Bcd(x) => self.binary_dec(x)?,
+      | Instruction::StMem(x) => self.store_mem(x)?,
+      | Instruction::LdMem(x) => self.load_mem(x)?,
     }
     Ok(())
   }
@@ -134,7 +134,7 @@ impl Emulator {
       }
     }
   }
-  
+
   /// Print (standard output) the current state of the display. Used only for debugging.
   #[allow(dead_code)]
   pub fn dumb_print(&self) {
@@ -149,7 +149,6 @@ impl Emulator {
       println!();
     }
   }
-
 }
 
 impl Default for Emulator {
