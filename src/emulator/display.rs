@@ -29,14 +29,14 @@ impl Display {
 
   /// Convert an (x, y) into an absolute position.
   ///
-  /// Considering each row has DISPLAY_HEIGHT positions, to each row multiply y * DISPLAY_WIDTH.
+  /// Considering each row has DISPLAY_WIDTH positions, to each row multiply y * DISPLAY_WIDTH.
   /// For indexing inside the row, just need to sum the position x.
   ///
   /// Example:\
   /// (30, 30) -> (30 * 64) + 30 = 1950\
   /// (0, 15) -> (15 * 64) + 0 = 960\
   /// (5, 0) -> (0 * 64) + 5 = 5\
-  /// (63, 63) -> (63 * 64) + 63 = 4095
+  /// (63, 63) -> (31 * 64) + 63 = 2047
   fn transform_cords(x: usize, y: usize) -> usize {
     debug_assert!((x < DISPLAY_WIDTH) && (y < DISPLAY_HEIGHT));
     (y * DISPLAY_WIDTH) + x
@@ -54,7 +54,7 @@ impl Display {
 
   /// Set all the bits in the display to 0.
   pub fn clear(&mut self) {
-    self.array = [false; DISPLAY_HEIGHT * DISPLAY_WIDTH]
+    self.array.fill(false);
   }
 }
 
