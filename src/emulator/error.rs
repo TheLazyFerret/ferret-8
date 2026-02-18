@@ -8,6 +8,7 @@ pub enum EmuError {
   InvalidAddress(usize),
   ProgramTooBig(usize),
   UnknownFont(u8),
+  UnknownKey(usize),
 }
 
 impl fmt::Display for EmuError {
@@ -16,6 +17,7 @@ impl fmt::Display for EmuError {
       | Self::InvalidAddress(n) => write!(f, "Access to an invalid address: {}", n),
       | Self::ProgramTooBig(n) => write!(f, "Not possible to load the program, too big: {}", n),
       | Self::UnknownFont(x) => write!(f, "Indexing an unkown font value: {}", x),
+      | Self::UnknownKey(x) => write!(f, "Trying to access an unkown key: {}", x),
     }
   }
 }
