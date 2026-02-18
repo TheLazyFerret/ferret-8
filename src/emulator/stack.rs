@@ -17,7 +17,7 @@ const STACK_SIZE: usize = 16;
 /// To index the values in side the array, except when the stack is empty, array[stack_pointer - 1]
 #[derive(Debug)]
 pub struct Stack {
-  array: [u8; STACK_SIZE],
+  array: [usize; STACK_SIZE],
   stack_pointer: usize,
 }
 
@@ -28,7 +28,7 @@ impl Stack {
   }
 
   /// Increase the stack pointer and then push a new value in the stack. If it is full, returns an error (overflow).
-  pub fn push(&mut self, v: u8) -> Result<(), StackError> {
+  pub fn push(&mut self, v: usize) -> Result<(), StackError> {
     if self.stack_pointer >= STACK_SIZE {
       Err(StackError::Overflow)
     } else {
@@ -39,7 +39,7 @@ impl Stack {
   }
 
   /// Reduce the stack pointer and return the value it points. If it is empty, returns an error (underflow).
-  pub fn pop(&mut self) -> Result<u8, StackError> {
+  pub fn pop(&mut self) -> Result<usize, StackError> {
     if self.stack_pointer == 0 {
       Err(StackError::Underflow)
     } else {
@@ -63,7 +63,7 @@ mod test {
   fn test_push() {
     let mut stack = Stack::new();
     for n in 0..STACK_SIZE {
-      assert_eq!(stack.push(n as u8), Ok(()));
+      assert_eq!(stack.push(n), Ok(()));
     }
     assert_eq!(stack.push(0), Err(StackError::Overflow));
   }
@@ -72,10 +72,10 @@ mod test {
   fn test_pop() {
     let mut stack = Stack::new();
     for n in 0..STACK_SIZE {
-      stack.push(n as u8).unwrap();
+      stack.push(n).unwrap();
     }
     for n in (0..STACK_SIZE).rev() {
-      assert_eq!(stack.pop(), Ok(n as u8));
+      assert_eq!(stack.pop(), Ok(n));
     }
     assert_eq!(stack.pop(), Err(StackError::Underflow));
   }
