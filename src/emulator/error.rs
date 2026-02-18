@@ -7,6 +7,7 @@ use std::{error, fmt};
 pub enum EmuError {
   InvalidAddress(usize),
   ProgramTooBig(usize),
+  UnknownFont(u8),
 }
 
 impl fmt::Display for EmuError {
@@ -14,6 +15,7 @@ impl fmt::Display for EmuError {
     match self {
       | Self::InvalidAddress(n) => write!(f, "Access to an invalid address: {}", n),
       | Self::ProgramTooBig(n) => write!(f, "Not possible to load the program, too big: {}", n),
+      | Self::UnknownFont(x) => write!(f, "Indexing an unkown font value: {}", x),
     }
   }
 }
