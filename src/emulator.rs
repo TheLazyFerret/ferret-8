@@ -72,6 +72,16 @@ impl Emulator {
     Ok(instr)
   }
   
+  /// Decrease each timer in 0 if they are above 0.
+  pub fn decrease_timers(&mut self) {
+    if self.reg_delay > 0 {
+      self.reg_delay -= 1;
+    }
+    if self.reg_sound > 0 {
+      self.reg_sound -= 1;
+    }
+  }
+  
   /// Small wrapper around the internal display, required by the frontend.
   pub fn display_val(&self, x: usize, y: usize) -> bool {
     self.display.get(x, y)
