@@ -6,11 +6,11 @@ pub mod error;
 mod font;
 mod stack;
 
+use crate::decoder::Instruction;
 use self::display::*;
 use self::error::EmuError;
 use self::font::*;
 use self::stack::{Stack, error::StackError};
-use crate::decoder::Instruction;
 
 use anyhow::Result;
 use rand::prelude::*;
@@ -70,6 +70,11 @@ impl Emulator {
     let instr = value_high + value_low;
     self.reg_pc += 2;
     Ok(instr)
+  }
+  
+  /// Small wrapper around the internal display, required by the frontend.
+  pub fn display_val(&self, x: usize, y: usize) -> bool {
+    self.display.get(x, y)
   }
 
   /// execute the corresponding instruction depending instr.
