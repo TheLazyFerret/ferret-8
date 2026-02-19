@@ -6,11 +6,11 @@ pub mod error;
 mod font;
 mod stack;
 
-use crate::decoder::Instruction;
 use self::display::*;
 use self::error::EmuError;
 use self::font::*;
 use self::stack::{Stack, error::StackError};
+use crate::decoder::Instruction;
 
 use anyhow::Result;
 use rand::prelude::*;
@@ -49,6 +49,7 @@ pub struct Emulator {
   reg_sound: u8,
   display: Display,
   stack: Stack,
+  refresh: bool,
 }
 
 impl Emulator {
@@ -71,7 +72,7 @@ impl Emulator {
     self.reg_pc += 2;
     Ok(instr)
   }
-  
+
   /// Decrease each timer in 0 if they are above 0.
   pub fn decrease_timers(&mut self) {
     if self.reg_delay > 0 {
@@ -81,7 +82,17 @@ impl Emulator {
       self.reg_sound -= 1;
     }
   }
-  
+
+  /// Return true if the display have been altered in the last frame and should be refreshed
+  pub fn should_refresh(&self) -> bool {
+    self.refresh
+  }
+
+  /// Set to false the refresh variable.
+  pub fn refreshed(&mut self) {
+    self.refresh = true;
+  }
+
   /// Small wrapper around the internal display, required by the frontend.
   pub fn display_val(&self, x: usize, y: usize) -> bool {
     self.display.get(x, y)
@@ -91,7 +102,10 @@ impl Emulator {
   /// Basically match each function with each Instruction.
   pub fn execute(&mut self, instr: Instruction, rng: &mut ThreadRng, keys: &[bool]) -> Result<()> {
     match instr {
-      | Instruction::Cls => self.clear_display(),
+      | Instruction::Cls => {
+        self.refresh = true;
+        self.clear_display();
+      },
       | Instruction::Return => self.ret()?,
       | Instruction::SetPC(n) => self.set_pc(n),
       | Instruction::Call(n) => self.call(n)?,
@@ -104,7 +118,10 @@ impl Emulator {
       | Instruction::LoadI(n) => self.load_i(n),
       | Instruction::Jump(n) => self.jump(n)?,
       | Instruction::Rand(x, n) => self.rand(x, n, rng),
-      | Instruction::Display(x, y, n) => self.display(x, y, n),
+      | Instruction::Display(x, y, n) => {
+        self.refresh = true;
+        self.display(x, y, n);
+      },
       | Instruction::LoadReg(x, y) => self.load_reg(x, y),
       | Instruction::Or(x, y) => self.or(x, y),
       | Instruction::And(x, y) => self.and(x, y),
@@ -177,6 +194,7 @@ impl Default for Emulator {
       reg_sound: 0,
       display: Display::new(),
       stack: Stack::new(),
+      refresh: false,
     }
   }
 }
