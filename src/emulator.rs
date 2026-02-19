@@ -11,6 +11,7 @@ use self::error::EmuError;
 use self::font::*;
 use self::stack::{Stack, error::StackError};
 use crate::decoder::Instruction;
+use crate::cli::COMPATIBILITY;
 
 use anyhow::Result;
 use rand::prelude::*;
@@ -26,8 +27,6 @@ const START_ADDR: usize = 0x200;
 const REG_F: usize = 15;
 /// Number of keys in the pad.
 const KEY_SIZE: usize = 16;
-
-const MODERN_COMPATIBILITY: bool = true;
 
 /// The CHIP-8 count with the next specifications:
 /// - 4KB of memory. The first 512 bytes are reserved, therefore should not be used by the programs.
@@ -282,7 +281,15 @@ impl Emulator {
   /// Jump to the instrucction in addr reg V0 + inmm
   fn jump(&mut self, inmm: usize) -> Result<(), EmuError> {
     debug_assert!(inmm < 0xFFF);
-    let sum = (self.reg[0] as usize).wrapping_add(inmm);
+    let sum;
+    if *COMPATIBILITY.read().unwrap() {
+      let reg = (((inmm as u16) & 0x0F00) >> 8) as usize;
+      sum = (self.reg[reg] as usize).wrapping_add(inmm);
+      
+    } else {
+      sum = (self.reg[0] as usize).wrapping_add(inmm);
+      
+    }
     if sum > MEMORY_SIZE {
       Err(EmuError::InvalidAddress(sum))
     } else {
@@ -395,24 +402,30 @@ impl Emulator {
   fn right_shift(&mut self, reg_x: usize, reg_y: usize) {
     debug_assert!(reg_x < REG_SIZE);
     debug_assert!(reg_y < REG_SIZE);
-    if self.reg[reg_y] & 0b00000001 == 1 {
+    if *COMPATIBILITY.read().unwrap() {
+      self.reg[reg_x] = self.reg[reg_y];
+    }
+    if self.reg[reg_x] & 0b00000001 == 1 {
       self.reg[REG_F] = 1;
     } else {
       self.reg[REG_F] = 0;
     }
-    self.reg[reg_x] = self.reg[reg_y] >> 1;
+    self.reg[reg_x] = self.reg[reg_x] >> 1;
   }
 
   /// Set reg X = reg Y, then shift to the left(1), setting reg F to the bit out.
   fn left_shift(&mut self, reg_x: usize, reg_y: usize) {
     debug_assert!(reg_x < REG_SIZE);
     debug_assert!(reg_y < REG_SIZE);
-    if (self.reg[reg_y] & 0b10000000) >> 7 == 1 {
+    if *COMPATIBILITY.read().unwrap() {
+      self.reg[reg_x] = self.reg[reg_y];
+    }
+    if (self.reg[reg_x] & 0b10000000) >> 7 == 1 {
       self.reg[REG_F] = 1;
     } else {
       self.reg[REG_F] = 0;
     }
-    self.reg[reg_x] = self.reg[reg_y] << 1;
+    self.reg[reg_x] = self.reg[reg_x] << 1;
   }
 
   /// Skip the next instruction if the key in reg X is being pressed.
@@ -552,7 +565,7 @@ impl Emulator {
       }
       self.memory[pos] = self.reg[r];
     }
-    if !MODERN_COMPATIBILITY {
+    if !*COMPATIBILITY.read().unwrap() {
       self.reg_i = self.reg_i + reg + 1;
     }
     Ok(())
@@ -569,7 +582,7 @@ impl Emulator {
       }
       self.reg[r] = self.memory[pos];
     }
-    if !MODERN_COMPATIBILITY {
+    if !*COMPATIBILITY.read().unwrap() {
       self.reg_i = self.reg_i + reg + 1;
     }
     Ok(())

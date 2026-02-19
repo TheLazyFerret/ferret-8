@@ -15,10 +15,17 @@ Usage: ferret-8 [OPTIONS] --program <PROGRAM>
 
 Options:
   -p, --program <PROGRAM>
-  -c, --cycles <CYCLES>                  [default: 700]
-  -u, --upscale-factor <UPSCALE_FACTOR>  [default: 20]
-  -h, --help                             Print help
-  -V, --version                          Print version
+          Program path
+  -c, --cycles <CYCLES>
+          Cycles (instructions) per second the program will execute [default: 700]
+  -u, --upscale-factor <UPSCALE_FACTOR>
+          Upscale factor from the original 64x32 pixel size [default: 20]
+  -m, --modern-compatibility
+          Modern behaviour in some instructions
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
 
 ## Controls
@@ -35,6 +42,7 @@ A 0 B F    z x c v
 - [ ] Sounds.
 - [ ] Add more keyboard layouts support.
 - [ ] Toggle for a few newer instructions.
+- [x] Better instruction compatibility.
 
 ## License
 This project is under the [MIT](LICENSE) license. See the dependencies in [Cargo.toml](Cargo.toml) for each individual license.

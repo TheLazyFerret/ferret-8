@@ -42,6 +42,8 @@ fn main() -> Result<()> {
 
   // Creates the window.
   let (mut rl, th) = frontend::init_raylib(&program_name);
+  
+  println!("COMPAT: {}", COMPATIBILITY.read().unwrap());
 
   while !rl.window_should_close() {
     emu.decrease_timers();
