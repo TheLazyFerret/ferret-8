@@ -1,8 +1,8 @@
 //! frontend.rs
 //! Manage to interconect the GUI and the emulator backend.
 
-use crate::emulator::{DISPLAY_HEIGHT, DISPLAY_WIDTH, Emulator};
 use crate::UPSCALE_FACTOR;
+use crate::emulator::{DISPLAY_HEIGHT, DISPLAY_WIDTH, Emulator};
 
 use raylib::prelude::*;
 

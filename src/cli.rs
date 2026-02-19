@@ -1,7 +1,6 @@
 //! cli.rs
 //! Functions for argument parsing
 
-
 use std::sync::RwLock;
 
 use clap::Parser;
