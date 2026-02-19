@@ -2,11 +2,9 @@
 //! Manage to interconect the GUI and the emulator backend.
 
 use crate::emulator::{DISPLAY_HEIGHT, DISPLAY_WIDTH, Emulator};
+use crate::UPSCALE_FACTOR;
 
 use raylib::prelude::*;
-
-/// Upscale factor from the original 32x64 pixel display.
-const UPSCALE_FACTOR: usize = 20;
 
 /// Target fps of the frontend.
 pub const TARGET_FPS: u32 = 60;
@@ -16,8 +14,9 @@ const BG_COLOR: Color = Color::new(0, 0, 0, 255);
 
 /// Return an initalized tuple (RaylibHandle, RaylibThread), setting some basic options.
 pub fn init_raylib(title: &str) -> (RaylibHandle, RaylibThread) {
-  let size_w = (DISPLAY_WIDTH * UPSCALE_FACTOR) as i32;
-  let size_h = (DISPLAY_HEIGHT * UPSCALE_FACTOR) as i32;
+  let upscale_factor = UPSCALE_FACTOR.read().unwrap().clone();
+  let size_w = (DISPLAY_WIDTH * upscale_factor) as i32;
+  let size_h = (DISPLAY_HEIGHT * upscale_factor) as i32;
   let (mut rl, thread) =
     raylib::init().size(size_w, size_h).title(&format!("Ferret-8: {}", title)).build();
   rl.set_trace_log(TraceLogLevel::LOG_ERROR);
@@ -27,9 +26,10 @@ pub fn init_raylib(title: &str) -> (RaylibHandle, RaylibThread) {
 
 /// Print a single pixel in the position (x, y)
 fn print_pixel(d: &mut RaylibDrawHandle, x: usize, y: usize) {
-  let x_pos = (x * UPSCALE_FACTOR) as i32;
-  let y_pos = (y * UPSCALE_FACTOR) as i32;
-  let size = UPSCALE_FACTOR as i32;
+  let upscale_factor = UPSCALE_FACTOR.read().unwrap().clone();
+  let x_pos = (x * upscale_factor) as i32;
+  let y_pos = (y * upscale_factor) as i32;
+  let size = upscale_factor as i32;
   d.draw_rectangle(x_pos, y_pos, size, size, PIXEL_COLOR);
 }
 
